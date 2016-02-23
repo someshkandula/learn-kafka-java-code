@@ -9,21 +9,35 @@ import java.util.Properties;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 
+/**
+ * The Class FirstExampleProducer.
+ */
 public class FirstExampleProducer extends Thread {
 
-    private final KafkaProducer<Integer, String> producer;
+    /** The producer. */
+    private KafkaProducer<Integer, String> producer;
+
+    /** The topic. */
     private final String topic;
 
+    /**
+     * Instantiates a new first example producer.
+     *
+     * @param topic
+     *            the topic
+     */
     public FirstExampleProducer(final String topic) {
-
-        final Properties props = new Properties();
-        props.put("bootstrap.servers", "raspberrypi:9092");
-        props.put("client.id", "DemoProducer");
-        props.put("key.serializer", "org.apache.kafka.common.serialization.IntegerSerializer");
-        props.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
-        this.producer = new KafkaProducer<>(props);
         this.topic = topic;
+    }
 
+    /**
+     * Inits the.
+     *
+     * @param consumerProperties
+     *            the consumer properties
+     */
+    public void init(final Properties consumerProperties) {
+        this.producer = new KafkaProducer<>(consumerProperties);
     }
 
     @Override
