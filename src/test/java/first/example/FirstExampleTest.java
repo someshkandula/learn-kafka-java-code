@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016 Robin Péricé
+ * Copyright (c) 2016 Robin Perice
  * MIT License
  */
 package first.example;
@@ -8,6 +8,7 @@ import java.util.Properties;
 
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 /**
@@ -15,59 +16,55 @@ import org.testng.annotations.Test;
  */
 public class FirstExampleTest {
 
-    /** The Constant duration. */
-    final static long duration = 5000;
+	/** The consumer. */
+	private FirstExampleConsumer consumer;
 
-    /** The consumer properties. */
-    final Properties producerProperties = new Properties();
+	/** The producer. */
+	private FirstExampleProducer producer;
 
-    /** The consumer properties. */
-    final Properties consumerProperties = new Properties();
+	/**
+	 * Prepare test.
+	 */
+	@BeforeClass
+	public void prepareTest() {
 
-    /**
-     * Prepare test.
-     */
-    @Test
-    public void prepareTest() {
+		/** The consumer properties. */
+		final Properties producerProperties = new Properties();
+		producerProperties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "raspberry:9092");
+		producerProperties.put(ProducerConfig.CLIENT_ID_CONFIG, "FirstExampleProducer");
+		producerProperties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,
+				"org.apache.kafka.common.serialization.IntegerSerializer");
+		producerProperties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,
+				"org.apache.kafka.common.serialization.StringSerializer");
 
-        // producer configuration
-        producerProperties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "raspberrypi:9092");
-        producerProperties.put(ProducerConfig.CLIENT_ID_CONFIG, "FirstExampleProducer");
-        producerProperties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,
-                "org.apache.kafka.common.serialization.IntegerSerializer");
-        producerProperties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,
-                "org.apache.kafka.common.serialization.StringSerializer");
+		producer = new FirstExampleProducer(producerProperties);
 
-        // consumer configuration
-        consumerProperties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "raspberrypi:9092");
-        consumerProperties.put(ConsumerConfig.GROUP_ID_CONFIG, "FirstExampleConsumer");
-        consumerProperties.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "true");
-        consumerProperties.put(ConsumerConfig.AUTO_COMMIT_INTERVAL_MS_CONFIG, "1000");
-        consumerProperties.put(ConsumerConfig.SESSION_TIMEOUT_MS_CONFIG, "30000");
-        consumerProperties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG,
-                "org.apache.kafka.common.serialization.IntegerDeserializer");
-        consumerProperties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG,
-                "org.apache.kafka.common.serialization.StringDeserializer");
-    }
+		/** The consumer properties. */
+		final Properties consumerProperties = new Properties();
+		consumerProperties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "raspberry:9092");
+		consumerProperties.put(ConsumerConfig.GROUP_ID_CONFIG, "FirstExampleConsumer");
+		consumerProperties.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "true");
+		consumerProperties.put(ConsumerConfig.AUTO_COMMIT_INTERVAL_MS_CONFIG, "1000");
+		consumerProperties.put(ConsumerConfig.SESSION_TIMEOUT_MS_CONFIG, "30000");
+		consumerProperties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG,
+				"org.apache.kafka.common.serialization.IntegerDeserializer");
+		consumerProperties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG,
+				"org.apache.kafka.common.serialization.StringDeserializer");
 
-    /**
-     * Test first example.
-     */
-    @Test(dependsOnMethods = { "prepareTest" })
-    public void testFirstExample() {
-        final FirstExampleProducer producerThread = new FirstExampleProducer("topic");
-        producerThread.init(producerProperties);
-        producerThread.start();
+		consumer = new FirstExampleConsumer(consumerProperties);
 
-        final FirstExampleConsumer consumerThread = new FirstExampleConsumer("topic");
-        consumerThread.init(consumerProperties);
-        consumerThread.start();
+	}
 
-        final long startTime = System.currentTimeMillis();
-        while (System.currentTimeMillis() - startTime < duration) {
+	@Test(enabled = true)
+	private void pushToKafka() {
+		String[] messages = { "a", "b", "c", "d", "f" };
+		for (String letter : messages) {
+			producer.push("topic", letter);
+		}
+	}
 
-        }
-
-        System.exit(0);
-    }
+	@Test(enabled = true, dependsOnMethods = { "pushToKafka" })
+	private void pullFromKafka() {
+		consumer.pull("topic");
+	}
 }

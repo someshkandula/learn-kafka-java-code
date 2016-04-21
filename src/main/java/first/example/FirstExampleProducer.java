@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016 Robin Péricé
+ * Copyright (c) 2016 Robin Perice
  * MIT License
  */
 package first.example;
@@ -10,45 +10,34 @@ import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 
 /**
- * The Class FirstExampleProducer.
+ * This class allows you to push data to a Kafka topic.
  */
-public class FirstExampleProducer extends Thread {
+public class FirstExampleProducer {
 
-    /** The producer. */
-    private KafkaProducer<Integer, String> producer;
+	/** The producer allows to push data to Kafka broker. */
+	private KafkaProducer<Integer, String> producer;
 
-    /** The topic. */
-    private final String topic;
+	/**
+	 * Instantiates the producer with the given properties.
+	 *
+	 * @param producerProperties
+	 *            the consumer properties
+	 */
+	public FirstExampleProducer(final Properties producerProperties) {
+		this.producer = new KafkaProducer<>(producerProperties);
+	}
 
-    /**
-     * Instantiates a new first example producer.
-     *
-     * @param topic
-     *            the topic
-     */
-    public FirstExampleProducer(final String topic) {
-        this.topic = topic;
-    }
-
-    /**
-     * Inits the.
-     *
-     * @param consumerProperties
-     *            the consumer properties
-     */
-    public void init(final Properties consumerProperties) {
-        this.producer = new KafkaProducer<>(consumerProperties);
-    }
-
-    @Override
-    public void run() {
-        int messageNumber = 1;
-        while (true) {
-            final String message = "Message_" + messageNumber;
-            producer.send(new ProducerRecord<>(topic, messageNumber, message));
-            System.out.println("Sent message: (" + messageNumber + ", " + message + ")");
-            ++messageNumber;
-        }
-    }
+	/**
+	 * This method push message to the Kafka topic given in parameter.
+	 *
+	 * @param topic
+	 *            the topic.
+	 * @param message
+	 *            the message to push into the topic.
+	 */
+	public void push(final String topic, final String message) {
+		producer.send(new ProducerRecord<>(topic, message));
+		System.out.println("Message : " + message + " pushed to topic :" + topic);
+	}
 
 }

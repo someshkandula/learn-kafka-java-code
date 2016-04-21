@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016 Robin Péricé
+ * Copyright (c) 2016 Robin Perice
  * MIT License
  */
 package first.example;
@@ -11,57 +11,44 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 
-import kafka.utils.ShutdownableThread;
-
 /**
- * The Class FirstExampleConsumer.
+ * This class allows you to pull data from a Kafka topic.
  */
-public class FirstExampleConsumer extends ShutdownableThread {
+public class FirstExampleConsumer {
 
-    /** The consumer. */
-    private KafkaConsumer<Integer, String> consumer;
+	/** The consumer allows to pull data from Kafka broker. */
+	private KafkaConsumer<Integer, String> consumer;
 
-    /** The topic. */
-    private final String topic;
+	/**
+	 * Instantiates the consumer with the given properties.
+	 *
+	 * @param consumerProperties
+	 *            the consumer properties
+	 */
+	public FirstExampleConsumer(final Properties consumerProperties) {
+		consumer = new KafkaConsumer<>(consumerProperties);
+	}
 
-    /**
-     * Instantiates a new first example consumer.
-     *
-     * @param topic
-     *            the topic
-     */
-    public FirstExampleConsumer(final String topic) {
-        super("KafkaConsumerExample", false);
-        this.topic = topic;
-    }
+	/**
+	 * This method pull data from the Kafka topic given in parameter.
+	 *
+	 * @param topic
+	 *            the topic to pull data from.
+	 */
+	public void pull(final String topic) {
+		// subscribe to the topic
+		consumer.subscribe(Collections.singletonList(topic));
+		// pull data from topic
+		final ConsumerRecords<Integer, String> records = consumer.poll(1000);
+		// print the result
+		if (records != null) {
+			for (final ConsumerRecord<Integer, String> record : records) {
+				System.out.println("Received message: (" + record.key() + ", " + record.value() + ") at offset "
+						+ record.offset());
+			}
+		} else {
+			System.out.println("No data to pull from the topic " + topic);
+		}
+	}
 
-    @Override
-    public void doWork() {
-        consumer.subscribe(Collections.singletonList(this.topic));
-        final ConsumerRecords<Integer, String> records = consumer.poll(1000);
-        for (final ConsumerRecord<Integer, String> record : records) {
-            System.out.println(
-                    "Received message: (" + record.key() + ", " + record.value() + ") at offset " + record.offset());
-        }
-    }
-
-    /**
-     * Inits the.
-     *
-     * @param consumerProperties
-     *            the consumer properties
-     */
-    public void init(final Properties consumerProperties) {
-        consumer = new KafkaConsumer<>(consumerProperties);
-    }
-
-    @Override
-    public boolean isInterruptible() {
-        return false;
-    }
-
-    @Override
-    public String name() {
-        return null;
-    }
 }
