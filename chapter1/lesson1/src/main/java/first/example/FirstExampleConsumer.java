@@ -46,5 +46,4 @@ public class FirstExampleConsumer {
 			System.out.println("No data to pull from the topic " + topic);
 		}
 	}
-
 }
