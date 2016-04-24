@@ -22,3 +22,21 @@ cd kafka_2.11-0.9.0.1/
 
 If everything is ok, you should see something like that.
 >[2016-04-22 18:55:21,792] INFO [Kafka Server 0], started (kafka.server.KafkaServer)
+
+**Useful commands**
+
+* Delete a topic : ```bin/kafka-topics.sh --zookeeper localhost:2181 --delete -topic topic.name ``` (of course you need to adapt zookeeper ip address and topic name to match with you configuration).
+* Delete offsets (in recents versions of Kafka, consumer offsets are stored in a Kafka topic) : ```bin/kafka-topics.sh --zookeeper localhost:2181 --delete -topic __consumer_offsets ``` or ```rm -rf /tmp/__consumer_offsets*```.
+
+## Kafka overview
+
+#### Introduction
+
+Kafka is a messaging system that have partitionning, replication, persistancy properties. His behavior can be summarized as follows. One or more Producer(s) push data on a topic into the Kafka server while Consumers subscribe topics and pull the data from those topics.
+
+![kafka](/images/kafka.png)
+
+#### Topics
+
+
+See official website for more information ([here](http://kafka.apache.org/)).
