@@ -1,8 +1,8 @@
 [![GitHub license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/r0perice/learn-storm-fr/blob/master/LICENSE) [![Kafka Version](https://img.shields.io/badge/Kafka%20API-0.9.0.1-green.svg)](https://kafka.apache.org/090/javadoc/index.html?org/apache/kafka/clients/)
 
 
-## Quickstart  
-  
+## Quickstart
+
 **Requirements**
 
 Make sure you have java (last version recommended) installed on you machine.
@@ -16,5 +16,9 @@ cd kafka_2.11-0.9.0.1/
 ```
 
 **Step 2** : Start Kafka server
-* Launch Zookeeper : ```bin/zookeeper-server-start.sh config/zookeeper.properties &```
-* Launch Kafka : ```bin/kafka-server-start.sh config/server.properties &```
+
+* Launch Zookeeper : ```bin/zookeeper-server-start.sh config/zookeeper.properties```
+* Launch Kafka : ```bin/kafka-server-start.sh config/server.properties```
+
+If everything is ok, you should see something like that.
+>[2016-04-22 18:55:21,792] INFO [Kafka Server 0], started (kafka.server.KafkaServer)
