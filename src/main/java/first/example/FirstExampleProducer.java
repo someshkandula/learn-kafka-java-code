@@ -19,9 +19,6 @@ public class FirstExampleProducer {
 
 	/**
 	 * Instantiates the producer with the given properties.
-	 *
-	 * @param producerProperties
-	 *            the consumer properties
 	 */
 	public FirstExampleProducer(final Properties producerProperties) {
 		this.producer = new KafkaProducer<>(producerProperties);
@@ -29,11 +26,6 @@ public class FirstExampleProducer {
 
 	/**
 	 * This method push message to the Kafka topic given in parameter.
-	 *
-	 * @param topic
-	 *            the topic.
-	 * @param message
-	 *            the message to push into the topic.
 	 */
 	public void push(final String topic, final String message) {
 		producer.send(new ProducerRecord<>(topic, message));

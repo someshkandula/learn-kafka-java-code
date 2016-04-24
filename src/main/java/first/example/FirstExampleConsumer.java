@@ -21,9 +21,6 @@ public class FirstExampleConsumer {
 
 	/**
 	 * Instantiates the consumer with the given properties.
-	 *
-	 * @param consumerProperties
-	 *            the consumer properties
 	 */
 	public FirstExampleConsumer(final Properties consumerProperties) {
 		consumer = new KafkaConsumer<>(consumerProperties);
@@ -31,9 +28,6 @@ public class FirstExampleConsumer {
 
 	/**
 	 * This method pull data from the Kafka topic given in parameter.
-	 *
-	 * @param topic
-	 *            the topic to pull data from.
 	 */
 	public void pull(final String topic) {
 		// subscribe to the topic
