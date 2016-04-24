@@ -30,7 +30,7 @@ public class FirstExampleTest {
 
 		/** The consumer properties. */
 		final Properties producerProperties = new Properties();
-		producerProperties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "raspberry:9092");
+		producerProperties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
 		producerProperties.put(ProducerConfig.CLIENT_ID_CONFIG, "FirstExampleProducer");
 		producerProperties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,
 				"org.apache.kafka.common.serialization.IntegerSerializer");
@@ -41,12 +41,11 @@ public class FirstExampleTest {
 
 		/** The consumer properties. */
 		final Properties consumerProperties = new Properties();
-		consumerProperties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "raspberry:9092");
+		consumerProperties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
 		consumerProperties.put(ConsumerConfig.GROUP_ID_CONFIG, "FirstExampleConsumer");
-		consumerProperties.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "true");
-		consumerProperties.put(ConsumerConfig.AUTO_COMMIT_INTERVAL_MS_CONFIG, "1000");
+		consumerProperties.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "false");
 		consumerProperties.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
-        consumerProperties.put(ConsumerConfig.SESSION_TIMEOUT_MS_CONFIG, "30000");
+		consumerProperties.put(ConsumerConfig.SESSION_TIMEOUT_MS_CONFIG, "30000");
 		consumerProperties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG,
 				"org.apache.kafka.common.serialization.IntegerDeserializer");
 		consumerProperties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG,
@@ -58,7 +57,7 @@ public class FirstExampleTest {
 
 	@Test(enabled = true)
 	private void pushToKafka() {
-		String[] messages = { "a", "b", "c", "d", "f" };
+		String[] messages = { "a", "b", "c", "d", "e" };
 		for (String letter : messages) {
 			producer.push("topic", letter);
 		}

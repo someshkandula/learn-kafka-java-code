@@ -40,11 +40,13 @@ public class FirstExampleConsumer {
 		consumer.subscribe(Collections.singletonList(topic));
 		// pull data from topic
 		final ConsumerRecords<Integer, String> records = consumer.poll(1000);
+		// commit the message consumption
+		consumer.commitSync();
+
 		// print the result
 		if (records != null) {
 			for (final ConsumerRecord<Integer, String> record : records) {
-				System.out.println("Received message: (" + record.key() + ", " + record.value() + ") at offset "
-						+ record.offset());
+				System.out.println("Consumer : message " + record.value() + " at offset " + record.offset());
 			}
 		} else {
 			System.out.println("No data to pull from the topic " + topic);

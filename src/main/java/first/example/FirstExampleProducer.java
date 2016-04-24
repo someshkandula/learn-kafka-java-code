@@ -37,7 +37,7 @@ public class FirstExampleProducer {
 	 */
 	public void push(final String topic, final String message) {
 		producer.send(new ProducerRecord<>(topic, message));
-		System.out.println("Message : " + message + " pushed to topic :" + topic);
+		System.out.println("Producer : message " + message + " sent to topic :" + topic);
 	}
 
 }
