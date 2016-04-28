@@ -26,7 +26,7 @@ If everything is ok, you should see something like that.
 **Useful commands**
 
 * Delete a topic : ```bin/kafka-topics.sh --zookeeper localhost:2181 --delete -topic topic.name ``` (of course you need to adapt zookeeper ip address and topic name to match with you configuration).
-* Delete offsets (in recents versions of Kafka, consumer offsets are stored in a Kafka topic) : ```bin/kafka-topics.sh --zookeeper localhost:2181 --delete -topic __consumer_offsets ``` or ```rm -rf /tmp/__consumer_offsets*```.
+* Delete offsets  : ```rm -rf /tmp/__consumer_offsets*```.
 
 ## Kafka overview
 
